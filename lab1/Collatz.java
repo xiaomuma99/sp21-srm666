@@ -15,19 +15,13 @@ public class Collatz {
 //    }
     /** create a new function nextNumber to return next Number follow Collatz sequence*/
     public static int nextNumber(int n) {
-        if (evenorodd(n) == "even") {
+        if (n % 2 == 0) {
             return n/2;
         } else {
             return 3 * n + 1;
         }
     }
-    public static String evenorodd(int m){
-        if(m % 2 == 0){
-            return "even";
-        } else{
-            return "odd";
-        }
-    }
+
     public static void main(String[] args) {
         int n = 27;
         System.out.print(n + " ");
