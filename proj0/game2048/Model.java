@@ -114,13 +114,16 @@ public class Model extends Observable {
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+        //use Side.North for any other direction movement.
         if(side != Side.NORTH){
             board.setViewingPerspective(side);
+            //use two for loops to search all non-empty tiles
             for(int col = 0; col < board.size(); col += 1){
-                merged = false;
+                merged = false; //reset merged value if start with a new column;
                 for(int row = board.size()-2; row >= 0; row -= 1){
                     Tile t = board.tile(col, row);
                     if(t != null) {
+                        //Use for loop to search the right position to move tile to, search start from top to bottom
                         for(int r = board.size()-1; r > row; r -= 1 ){
                             Tile t_seek = board.tile(col, r);
                             if(t_seek == null){
@@ -135,7 +138,7 @@ public class Model extends Observable {
                                     break;
                                 }
                             }else {
-                                merged = false;
+                                merged = false; //set merged value as false if merged value on top not equal to two other same value in the same columm
                                 continue;
                             }
                         }
