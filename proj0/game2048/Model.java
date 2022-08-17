@@ -109,11 +109,69 @@ public class Model extends Observable {
     public boolean tilt(Side side) {
         boolean changed;
         changed = false;
+        boolean merged;
 
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+        if(side != Side.NORTH){
+            board.setViewingPerspective(side);
+            for(int col = 0; col < board.size(); col += 1){
+                merged = false;
+                for(int row = board.size()-2; row >= 0; row -= 1){
+                    Tile t = board.tile(col, row);
+                    if(t != null) {
+                        for(int r = board.size()-1; r > row; r -= 1 ){
+                            Tile t_seek = board.tile(col, r);
+                            if(t_seek == null){
+                                board.move(col, r, t);
+                                changed = true;
+                                break;
+                            } else if (t_seek.value() == t.value() && !merged) {
+                                merged = board.move(col, r, t);
+                                if(merged){
+                                    score = score + t.value()*2;
+                                    changed = true;
+                                    break;
+                                }
+                            }else {
+                                merged = false;
+                                continue;
+                            }
+                        }
 
+                    }
+                }
+            }
+            board.setViewingPerspective(Side.NORTH);
+        }else{
+            for(int col = 0; col < board.size(); col += 1){
+                merged = false;
+                for(int row = board.size()-2; row >= 0; row -= 1){
+                    Tile t = board.tile(col, row);
+                    if(t != null) {
+                        for(int r = board.size()-1; r > row; r -= 1 ){
+                            Tile t_seek = board.tile(col, r);
+                            if(t_seek == null){
+                                board.move(col, r, t);
+                                changed = true;
+                                break;
+                            } else if (t_seek.value() == t.value() && !merged) {
+                                merged = board.move(col, r, t);
+                                if(merged){
+                                    score = score + t.value()*2;
+                                    changed = true;
+                                    break;
+                                }
+                            }else {
+                                merged = false;
+                                continue;
+                            }
+                        }
+                    }
+                }
+            }
+        }
         checkGameOver();
         if (changed) {
             setChanged();
