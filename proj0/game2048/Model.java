@@ -111,6 +111,7 @@ public class Model extends Observable {
         changed = false;
         boolean merged;
 
+
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
@@ -131,6 +132,10 @@ public class Model extends Observable {
                                 changed = true;
                                 break;
                             } else if (t_seek.value() == t.value() && !merged) {
+                                //below line of code is to avoid merge two tiles if they have other non-empty tiles in between
+                                if(r > row+1 && board.tile(col, row +1 ) != null){
+                                    break;
+                                }
                                 merged = board.move(col, r, t);
                                 if(merged){
                                     score = score + t.value()*2;
@@ -160,6 +165,9 @@ public class Model extends Observable {
                                 changed = true;
                                 break;
                             } else if (t_seek.value() == t.value() && !merged) {
+                                if(r > row+1 && board.tile(col, row +1 ) != null){
+                                    break;
+                                }
                                 merged = board.move(col, r, t);
                                 if(merged){
                                     score = score + t.value()*2;
