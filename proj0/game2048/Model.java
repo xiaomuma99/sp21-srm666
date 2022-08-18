@@ -116,33 +116,34 @@ public class Model extends Observable {
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
         //use Side.North for any other direction movement.
-        if(side != Side.NORTH){
             board.setViewingPerspective(side);
             //use two for loops to search all non-empty tiles
-            for(int col = 0; col < board.size(); col += 1){
+            for(int col = 0; col < board.size(); col += 1) {
                 merged = false; //reset merged value if start with a new column;
-                for(int row = board.size()-2; row >= 0; row -= 1){
+                for (int row = board.size() - 2; row >= 0; row -= 1) {
                     Tile t = board.tile(col, row);
-                    if(t != null) {
+                    if (t != null) {
                         //Use for loop to search the right position to move tile to, search start from top to bottom
-                        for(int r = board.size()-1; r > row; r -= 1 ){
+                        for (int r = board.size() - 1; r > row; r -= 1) {
                             Tile t_seek = board.tile(col, r);
-                            if(t_seek == null){
+                            if (t_seek == null) {
                                 board.move(col, r, t);
                                 changed = true;
                                 break;
                             } else if (t_seek.value() == t.value() && !merged) {
                                 //below line of code is to avoid merge two tiles if they have other non-empty tiles in between
-                                if(r > row+1 && board.tile(col, row +1 ) != null){
+                                if (r > row + 1 && board.tile(col, row + 1) != null) {
+                                    break;
+                                } else if (r > row + 2 && board.tile(col, row + 2) != null) {
                                     break;
                                 }
                                 merged = board.move(col, r, t);
-                                if(merged){
-                                    score = score + t.value()*2;
+                                if (merged) {
+                                    score = score + t.value() * 2;
                                     changed = true;
                                     break;
                                 }
-                            }else {
+                            } else {
                                 merged = false; //set merged value as false if merged value on top not equal to two other same value in the same columm
                                 continue;
                             }
@@ -152,37 +153,7 @@ public class Model extends Observable {
                 }
             }
             board.setViewingPerspective(Side.NORTH);
-        }else{
-            for(int col = 0; col < board.size(); col += 1){
-                merged = false;
-                for(int row = board.size()-2; row >= 0; row -= 1){
-                    Tile t = board.tile(col, row);
-                    if(t != null) {
-                        for(int r = board.size()-1; r > row; r -= 1 ){
-                            Tile t_seek = board.tile(col, r);
-                            if(t_seek == null){
-                                board.move(col, r, t);
-                                changed = true;
-                                break;
-                            } else if (t_seek.value() == t.value() && !merged) {
-                                if(r > row+1 && board.tile(col, row +1 ) != null){
-                                    break;
-                                }
-                                merged = board.move(col, r, t);
-                                if(merged){
-                                    score = score + t.value()*2;
-                                    changed = true;
-                                    break;
-                                }
-                            }else {
-                                merged = false;
-                                continue;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+
         checkGameOver();
         if (changed) {
             setChanged();
