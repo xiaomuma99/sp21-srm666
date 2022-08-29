@@ -139,6 +139,23 @@ public class LinkedListDeque<T> {
         return null;
     }
 
+    /**
+     * Create a helper method for getRecurisve
+     */
+    private T getRecursive(int i, Node p){
+        if(i == 0){
+            return p.item;
+        }
+        return getRecursive(i-1, p.next);
+    }
+    public T getRecursive(int index){
+        Node p = sentinel.next;
+        if(index == 0){
+            return p.item;
+        }
+        return getRecursive(index, p);
+    }
+
     public static void main(String arg[]){
 
         LinkedListDeque<Integer> L = new LinkedListDeque<Integer>(100);
@@ -149,16 +166,16 @@ public class LinkedListDeque<T> {
         L.addLast(30);
         L.addFirst(10);
         L.addLast(40);
-        L2.addFirst("Wendy");
-        L2.addLast("Mia");
+//        L2.addFirst("Wendy");
+//        L2.addLast("Mia");
 //        L.printDeque();
 //        System.out.println(L.size);
 ////        System.out.println(L.isEmpty());
-        System.out.println(L.removeFirst());
-        System.out.println(L2.removeLast());
-//        for(int i = 0; i < L2.size ; i += 1){
-//            System.out.println(L2.get(i));
-//        }
+//        System.out.println(L.removeFirst());
+//        System.out.println(L2.removeLast());
+        for(int i = 0; i < L.size ; i += 1){
+            System.out.println(L.getRecursive(i));
+        }
 
 //        System.out.println(L.getRecurisve(3));
     }
