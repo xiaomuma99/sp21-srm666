@@ -41,9 +41,9 @@ public class TimeAList {
             double timeInSeconds = sw.elapsedTime();
             times.addLast(timeInSeconds);
             opCounts.addLast(AListLength);
-            printTimingTable(Ns, times, opCounts);
-        }
 
+        }
+        printTimingTable(Ns, times, opCounts);
 
 
     }
