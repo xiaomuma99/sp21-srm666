@@ -2,7 +2,7 @@ package deque;
 
 import jh61b.junit.In;
 
-public class LinkedListDeque<T> {
+public class LinkedListDeque<T> implements Deque<T> {
 
     private class Node {
         public T item;
@@ -42,6 +42,7 @@ public class LinkedListDeque<T> {
     /**
      * Adds an item to the front of the deque
      */
+    @Override
     public void addFirst(T item){
         if(sentinel.next == sentinel){
             sentinel.next  = new Node(item, sentinel, sentinel.next);
@@ -57,6 +58,7 @@ public class LinkedListDeque<T> {
     /**
      * Add an item to the last of the deque
      */
+    @Override
     public void addLast(T item){
         if(sentinel.next == sentinel){
             sentinel.prev.next = new Node(item, sentinel.prev, sentinel);
@@ -73,12 +75,13 @@ public class LinkedListDeque<T> {
      * Returns true if deque is empty, false otherwise
      * @return
      */
-    public boolean isEmpty(){
-        if(sentinel.next == sentinel){
-            return true;
-        }
-        return false;
-    }
+//    @Override
+//    public boolean isEmpty(){
+//        if(sentinel.next == sentinel){
+//            return true;
+//        }
+//        return false;
+//    }
     /**
      * Returns the number of items in the deque.
      */
@@ -89,6 +92,7 @@ public class LinkedListDeque<T> {
     /**
      *  Prints the items in the deque from first to last, separated by a space. Once all the items have been printed, print out a new line.
      */
+    @Override
     public void printDeque(){
         Node p = sentinel.next;
         for(int i = 0; i < size; i += 1){
@@ -101,6 +105,7 @@ public class LinkedListDeque<T> {
      * Removes and returns the item at the back of the deque. If no such item exists, returns null.
      * @return
      */
+    @Override
     public T removeFirst(){
         if(sentinel.next == sentinel){
             return null;
@@ -114,6 +119,7 @@ public class LinkedListDeque<T> {
     /**
      * Removes and returns the item at the back of the deque. If no such item exists, returns null.
      */
+    @Override
     public T removeLast(){
         if(sentinel.next == sentinel){
             return null;
@@ -128,6 +134,7 @@ public class LinkedListDeque<T> {
     /**
      * Gets the item at the given index use iteration, not recursion
      */
+    @Override
     public T get(int index){
         Node p = sentinel.next;
         for(int i= 0; i < size; i += 1){
@@ -156,28 +163,28 @@ public class LinkedListDeque<T> {
         return getRecursive(index, p);
     }
 
-    public static void main(String arg[]){
-
-        LinkedListDeque<Integer> L = new LinkedListDeque<Integer>(100);
-        LinkedListDeque<String> L2 = new LinkedListDeque<String>();
-//        System.out.println(L.isEmpty());
-//        L.printDeque();
-//        System.out.println(L.removeFirst());
-        L.addLast(30);
-        L.addFirst(10);
-        L.addLast(40);
-//        L2.addFirst("Wendy");
-//        L2.addLast("Mia");
-//        L.printDeque();
-//        System.out.println(L.size);
+//    public static void main(String arg[]){
+//
+//        LinkedListDeque<Integer> L = new LinkedListDeque<Integer>(100);
+//        LinkedListDeque<String> L2 = new LinkedListDeque<String>();
 ////        System.out.println(L.isEmpty());
-//        System.out.println(L.removeFirst());
-//        System.out.println(L2.removeLast());
-        for(int i = 0; i < L.size ; i += 1){
-            System.out.println(L.getRecursive(i));
-        }
-
-//        System.out.println(L.getRecurisve(3));
-    }
+////        L.printDeque();
+////        System.out.println(L.removeFirst());
+//        L.addLast(30);
+//        L.addFirst(10);
+//        L.addLast(40);
+////        L2.addFirst("Wendy");
+////        L2.addLast("Mia");
+////        L.printDeque();
+////        System.out.println(L.size);
+//////        System.out.println(L.isEmpty());
+////        System.out.println(L.removeFirst());
+////        System.out.println(L2.removeLast());
+//        for(int i = 0; i < L.size ; i += 1){
+//            System.out.println(L.getRecursive(i));
+//        }
+//
+////        System.out.println(L.getRecurisve(3));
+//    }
 
 }
