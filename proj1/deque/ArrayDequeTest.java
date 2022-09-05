@@ -9,28 +9,21 @@ public class ArrayDequeTest {
     public void testThreeAddThreeRemove(){
 
         ArrayDeque<Integer> L1 = new ArrayDeque<>();
-        ArrayDeque<Integer> L2 = new ArrayDeque<>();
+        L1.addLast(2);
+        L1.addFirst(3);
+        L1.addFirst(7);
+        L1.addFirst(4);
+        L1.addFirst(10);
+        L1.addFirst(11);
         L1.addLast(4);
         L1.addLast(5);
         L1.addLast(6);
-        L2.addLast(4);
-        L2.addLast(5);
-        L2.addLast(6);
+        L1.addLast(8);
+        L1.addLast(9);
+        L1.addFirst(13);
+        L1.addFirst(14);
         L1.removeLast();
-        L2.removeLast();
-        for(int i = 0; i < L1.size(); i += 1){
-            assertEquals(L1.get(i),L2.get(i));
-        }
         L1.removeLast();
-        L2.removeLast();
-        for(int i = 0; i < L1.size(); i += 1){
-            assertEquals(L1.get(i),L2.get(i));
-        }
-        L1.removeLast();
-        L2.removeLast();
-        for(int i = 0; i < L1.size(); i += 1){
-            assertEquals(L1.get(i),L2.get(i));
-        }
     }
 //    @Test
 //    public void randomizedTest(){

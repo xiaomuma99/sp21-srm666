@@ -3,42 +3,59 @@ package deque;
 public class ArrayDeque<T> implements Deque<T> {
     private T[] items;
     private int size;
-    private T nextFirst;
-    private T nextLast;
+    private int nextFirst;
+    private int nextLast;
 
     /** Creates an empty list. */
     public ArrayDeque() {
         items = (T[]) new Object[8];
-        T nextFirst = null;
-        T nextLast = null;
+        nextFirst = 4;
+        nextLast = 5;
         size = 0;
     }
 
     /** Resizes the underlying array to the target capacity. */
     private void resize(int capacity) {
         T[] a = (T[]) new Object[capacity];
-        System.arraycopy(items, 0, a, 0, size);
+        int First_loc = Math.abs((capacity-size)/2);
+        System.arraycopy(items, nextFirst+1, a, First_loc, size);
         items = a;
+        nextFirst = First_loc-1;
+        nextLast = First_loc + size;
     }
     /** Inserts X into the front of the list. */
     @Override
     public void addFirst(T x) {
-        T[] a = (T[]) new Object[size+1];
-        System.arraycopy(items, 1, a, 0, size);
+        if(isEmpty()){
+            items[nextFirst] = x;
+            nextFirst -= 1;
+            return;
+        }
+        T[] a = (T[]) new Object[items.length];
+        System.arraycopy(items, 0, a, 0, items.length);
+        a[nextFirst] = x;
         items = a;
-        items[0] = x;
-        nextFirst = x;
+        if(nextFirst == 0){
+            resize(items.length+8);
+        }
+        nextFirst -= 1;
         size = size + 1;
     }
     /** Inserts X into the back of the list. */
     @Override
     public void addLast(T x) {
-        if (size == items.length) {
-            resize(size + 100);
+        if(isEmpty()){
+            items[nextLast] = x;
+            size += 1;
+            nextLast += 1;
+            return;
         }
-        items[size] = x;
-        nextLast = x;
+        items[nextLast] = x;
+        nextLast += 1;
         size = size + 1;
+        if(nextLast == items.length){
+            resize(size*2);
+        }
     }
 
     /**
@@ -69,11 +86,11 @@ public class ArrayDeque<T> implements Deque<T> {
     }
     /** Returns the item from the back of the list. */
     public T getLast() {
-        return nextLast;
+        return items[nextLast];
     }
     /** Returns the first from of the list. */
     public T getFirst() {
-        return nextFirst;
+        return items[nextFirst];
     }
 
     /**
@@ -84,12 +101,13 @@ public class ArrayDeque<T> implements Deque<T> {
         if(isEmpty()){
             return null;
         }
-        T First_item = getFirst();
-        T[] a = (T[]) new Object[size-1];
-        System.arraycopy(items, 1, a, 0, size);
+        T First_item = items[nextFirst+1];
+        T[] a = (T[]) new Object[items.length];
+        System.arraycopy(items, 0, a, 0, items.length);
+        a[nextFirst+1] = null;
         items = a;
         size -= 1;
-        nextFirst = items[0];
+        nextFirst += 1;
         return First_item;
     }
 
@@ -103,15 +121,11 @@ public class ArrayDeque<T> implements Deque<T> {
         if ((size < items.length / 4) && (size > 4)) {
             resize(items.length / 4); //this part: implement usage ratio: R = size/items.length, if R < 0.25, resize to 1/4 item.length, not 1/4 size.
         }
-        T x = getLast();
-        items[size - 1] = null;
+        T Last_item = items[nextLast-1];
+        items[nextLast-1] = null;
+        nextLast -= 1;
         size = size - 1;
-        if(size != 0){
-            nextLast = items[size-1];
-        }else {
-            nextLast = null;
-        }
-        return x;
+        return Last_item;
     }
     /** Gets the ith item in the list (0 is the front). */
     @Override
