@@ -81,6 +81,9 @@ public class ArrayDeque<T> implements Deque<T> {
      */
     @Override
     public T removeFirst(){
+        if(isEmpty()){
+            return null;
+        }
         T First_item = getFirst();
         T[] a = (T[]) new Object[size-1];
         System.arraycopy(items, 1, a, 0, size);
@@ -94,6 +97,9 @@ public class ArrayDeque<T> implements Deque<T> {
      * returns deleted item. */
     @Override
     public T removeLast() {
+        if(isEmpty()){
+            return null;
+        }
         if ((size < items.length / 4) && (size > 4)) {
             resize(items.length / 4); //this part: implement usage ratio: R = size/items.length, if R < 0.25, resize to 1/4 item.length, not 1/4 size.
         }
