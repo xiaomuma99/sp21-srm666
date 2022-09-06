@@ -15,15 +15,27 @@ public class ArrayDequeTest {
         L1.addFirst(4);
         L1.addFirst(10);
         L1.addFirst(11);
-        L1.addLast(4);
-        L1.addLast(5);
         L1.addLast(6);
         L1.addLast(8);
         L1.addLast(9);
         L1.addFirst(13);
         L1.addFirst(14);
+        L1.removeFirst();
         L1.removeLast();
         L1.removeLast();
+        L1.removeFirst();
+        L1.removeLast();
+        L1.removeLast();
+        L1.removeFirst();
+        L1.removeLast();
+        L1.removeFirst();
+        L1.removeLast();
+        L1.removeFirst();
+        L1.addFirst(11);
+        System.out.println(L1.get(1));
+        System.out.println(L1.get(2));
+        System.out.println(L1.get(3));
+        System.out.println(L1.get(4));
     }
 //    @Test
 //    public void randomizedTest(){

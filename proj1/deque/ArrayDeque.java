@@ -1,6 +1,6 @@
 package deque;
 
-public class ArrayDeque<T> implements Deque<T> {
+public class ArrayDeque<T> {
     private T[] items;
     private int size;
     private int nextFirst;
@@ -17,14 +17,21 @@ public class ArrayDeque<T> implements Deque<T> {
     /** Resizes the underlying array to the target capacity. */
     private void resize(int capacity) {
         T[] a = (T[]) new Object[capacity];
-        int First_loc = Math.abs((capacity-size)/2);
+        int First_loc = Math.abs(capacity-size)/2;
         System.arraycopy(items, nextFirst+1, a, First_loc, size);
         items = a;
         nextFirst = First_loc-1;
         nextLast = First_loc + size;
     }
+    /** Gets the ith item in the list (0 is the front). */
+    public T get(int i) {
+        if(i < 0 || i > size -1){
+            return null;
+        }
+        return(items[i+nextFirst+1]);
+
+    }
     /** Inserts X into the front of the list. */
-    @Override
     public void addFirst(T x) {
         if(isEmpty()){
             items[nextFirst] = x;
@@ -35,14 +42,14 @@ public class ArrayDeque<T> implements Deque<T> {
         System.arraycopy(items, 0, a, 0, items.length);
         a[nextFirst] = x;
         items = a;
-        if(nextFirst == 0){
-            resize(items.length+8);
-        }
         nextFirst -= 1;
         size = size + 1;
+        if(nextFirst == -1){
+            resize(items.length * 2);
+        }
     }
     /** Inserts X into the back of the list. */
-    @Override
+
     public void addLast(T x) {
         if(isEmpty()){
             items[nextLast] = x;
@@ -61,15 +68,15 @@ public class ArrayDeque<T> implements Deque<T> {
     /**
      * Determine if list is empty or not
      */
-//    @Override
-//    public boolean isEmpty(){
-//        if(size == 0){
-//            return true;
-//        }
-//        return false;
-//    }
+
+    public boolean isEmpty(){
+        if(size == 0){
+            return true;
+        }
+        return false;
+    }
     /** Returns the number of items in the list. */
-    @Override
+
     public int size() {
         return size;
     }
@@ -77,27 +84,22 @@ public class ArrayDeque<T> implements Deque<T> {
     /**
      * Print out each item in the Array list
      */
-    @Override
+
     public void printDeque(){
         for(int i = 0; i < size; i += 1){
             System.out.print(get(i) + " ");
         }
         System.out.println();
     }
-    /** Returns the item from the back of the list. */
-    public T getLast() {
-        return items[nextLast];
-    }
-    /** Returns the first from of the list. */
-    public T getFirst() {
-        return items[nextFirst];
-    }
 
     /**
      * Remove the first item of the list and return the removed item
      */
-    @Override
+
     public T removeFirst(){
+        if (size < items.length / 4) {
+            resize(items.length / 4); //this part: implement usage ratio: R = size/items.length, if R < 0.25, resize to 1/4 item.length, not 1/4 size.
+        }
         if(isEmpty()){
             return null;
         }
@@ -113,13 +115,13 @@ public class ArrayDeque<T> implements Deque<T> {
 
     /** Deletes item from back of the list and
      * returns deleted item. */
-    @Override
+
     public T removeLast() {
+        if (size < items.length / 4) {
+            resize(items.length / 4); //this part: implement usage ratio: R = size/items.length, if R < 0.25, resize to 1/4 item.length, not 1/4 size.
+        }
         if(isEmpty()){
             return null;
-        }
-        if ((size < items.length / 4) && (size > 4)) {
-            resize(items.length / 4); //this part: implement usage ratio: R = size/items.length, if R < 0.25, resize to 1/4 item.length, not 1/4 size.
         }
         T Last_item = items[nextLast-1];
         items[nextLast-1] = null;
@@ -127,12 +129,5 @@ public class ArrayDeque<T> implements Deque<T> {
         size = size - 1;
         return Last_item;
     }
-    /** Gets the ith item in the list (0 is the front). */
-    @Override
-    public T get(int i) {
-        return items[i];
-    }
-
-
 
 }

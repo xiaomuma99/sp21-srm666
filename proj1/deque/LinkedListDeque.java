@@ -1,8 +1,9 @@
 package deque;
 
 import jh61b.junit.In;
+import java.util.Iterator;
 
-public class LinkedListDeque<T> implements Deque<T> {
+public class LinkedListDeque<T>  {
 
     private class Node {
         public T item;
@@ -22,12 +23,12 @@ public class LinkedListDeque<T> implements Deque<T> {
      * A constructor to create a LinkedListDeque with first item x;
      * Use on sentinel to create circular linked list
      */
-    public LinkedListDeque(T x){
-        sentinel = new Node(null,sentinel,sentinel);
-        sentinel.next = new Node(x,sentinel, sentinel);
-        sentinel.prev = sentinel.next;
-        size = 1;
-    }
+//    public LinkedListDeque(T x){
+//        sentinel = new Node(null,sentinel,sentinel);
+//        sentinel.next = new Node(x,sentinel, sentinel);
+//        sentinel.prev = sentinel.next;
+//        size = 1;
+//    }
 
     /**
      * A constructor to create an empty LinkedListDeque
@@ -42,7 +43,7 @@ public class LinkedListDeque<T> implements Deque<T> {
     /**
      * Adds an item to the front of the deque
      */
-    @Override
+
     public void addFirst(T item){
         if(sentinel.next == sentinel){
             sentinel.next  = new Node(item, sentinel, sentinel.next);
@@ -58,7 +59,7 @@ public class LinkedListDeque<T> implements Deque<T> {
     /**
      * Add an item to the last of the deque
      */
-    @Override
+
     public void addLast(T item){
         if(sentinel.next == sentinel){
             sentinel.prev.next = new Node(item, sentinel.prev, sentinel);
@@ -75,13 +76,13 @@ public class LinkedListDeque<T> implements Deque<T> {
      * Returns true if deque is empty, false otherwise
      * @return
      */
-//    @Override
-//    public boolean isEmpty(){
-//        if(sentinel.next == sentinel){
-//            return true;
-//        }
-//        return false;
-//    }
+
+    public boolean isEmpty(){
+        if(sentinel.next == sentinel){
+            return true;
+        }
+        return false;
+    }
     /**
      * Returns the number of items in the deque.
      */
@@ -92,7 +93,7 @@ public class LinkedListDeque<T> implements Deque<T> {
     /**
      *  Prints the items in the deque from first to last, separated by a space. Once all the items have been printed, print out a new line.
      */
-    @Override
+
     public void printDeque(){
         Node p = sentinel.next;
         for(int i = 0; i < size; i += 1){
@@ -105,7 +106,7 @@ public class LinkedListDeque<T> implements Deque<T> {
      * Removes and returns the item at the back of the deque. If no such item exists, returns null.
      * @return
      */
-    @Override
+
     public T removeFirst(){
         if(sentinel.next == sentinel){
             return null;
@@ -119,7 +120,7 @@ public class LinkedListDeque<T> implements Deque<T> {
     /**
      * Removes and returns the item at the back of the deque. If no such item exists, returns null.
      */
-    @Override
+
     public T removeLast(){
         if(sentinel.next == sentinel){
             return null;
@@ -134,7 +135,7 @@ public class LinkedListDeque<T> implements Deque<T> {
     /**
      * Gets the item at the given index use iteration, not recursion
      */
-    @Override
+
     public T get(int index){
         Node p = sentinel.next;
         for(int i= 0; i < size; i += 1){
@@ -162,29 +163,26 @@ public class LinkedListDeque<T> implements Deque<T> {
         }
         return getRecursive(index, p);
     }
-
-//    public static void main(String arg[]){
-//
-//        LinkedListDeque<Integer> L = new LinkedListDeque<Integer>(100);
-//        LinkedListDeque<String> L2 = new LinkedListDeque<String>();
-////        System.out.println(L.isEmpty());
-////        L.printDeque();
-////        System.out.println(L.removeFirst());
-//        L.addLast(30);
-//        L.addFirst(10);
-//        L.addLast(40);
-////        L2.addFirst("Wendy");
-////        L2.addLast("Mia");
-////        L.printDeque();
-////        System.out.println(L.size);
-//////        System.out.println(L.isEmpty());
-////        System.out.println(L.removeFirst());
-////        System.out.println(L2.removeLast());
-//        for(int i = 0; i < L.size ; i += 1){
-//            System.out.println(L.getRecursive(i));
-//        }
-//
-////        System.out.println(L.getRecurisve(3));
-//    }
+    /**
+     * Returns whether or not the parameter o is equal to the Deque.
+     */
+    public boolean equals(Object o){
+        if(o == null || !(o instanceof LinkedListDeque)){
+            return false;
+        }
+        if(o == this){
+            return true;
+        }
+        LinkedListDeque <T> L = (LinkedListDeque<T>) o;
+        if(L.size() != size){
+            return false;
+        }
+        for(int i = 0; i < size; i++){
+            if(L.get(i) != get(i)){
+                return false;
+            }
+        }
+        return true;
+    }
 
 }
