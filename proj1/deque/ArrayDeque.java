@@ -36,6 +36,7 @@ public class ArrayDeque<T> {
         if(isEmpty()){
             items[nextFirst] = x;
             nextFirst -= 1;
+            size += 1;
             return;
         }
         T[] a = (T[]) new Object[items.length];
@@ -97,19 +98,16 @@ public class ArrayDeque<T> {
      */
 
     public T removeFirst(){
-        if (size < items.length / 4) {
-            resize(items.length / 4); //this part: implement usage ratio: R = size/items.length, if R < 0.25, resize to 1/4 item.length, not 1/4 size.
-        }
         if(isEmpty()){
             return null;
         }
         T First_item = items[nextFirst+1];
-        T[] a = (T[]) new Object[items.length];
-        System.arraycopy(items, 0, a, 0, items.length);
-        a[nextFirst+1] = null;
-        items = a;
+        items[nextFirst+1] = null;
         size -= 1;
         nextFirst += 1;
+        if (size < items.length / 4) {
+            resize(items.length / 4); //this part: implement usage ratio: R = size/items.length, if R < 0.25, resize to 1/4 item.length, not 1/4 size.
+        }
         return First_item;
     }
 
@@ -117,9 +115,6 @@ public class ArrayDeque<T> {
      * returns deleted item. */
 
     public T removeLast() {
-        if (size < items.length / 4) {
-            resize(items.length / 4); //this part: implement usage ratio: R = size/items.length, if R < 0.25, resize to 1/4 item.length, not 1/4 size.
-        }
         if(isEmpty()){
             return null;
         }
@@ -127,7 +122,31 @@ public class ArrayDeque<T> {
         items[nextLast-1] = null;
         nextLast -= 1;
         size = size - 1;
+        if (size < items.length / 4) {
+            resize(items.length / 4); //this part: implement usage ratio: R = size/items.length, if R < 0.25, resize to 1/4 item.length, not 1/4 size.
+        }
         return Last_item;
+    }
+    /**
+     * Returns whether or not the parameter o is equal to the Deque.
+     */
+    public boolean equals(Object o){
+        if(o == null || !(o instanceof ArrayDeque)){
+            return false;
+        }
+        if(o == this){
+            return true;
+        }
+        ArrayDeque <T> L = (ArrayDeque<T>) o;
+        if(L.size() != size){
+            return false;
+        }
+        for(int i = 0; i < size; i++){
+            if(L.get(i) != get(i)){
+                return false;
+            }
+        }
+        return true;
     }
 
 }
