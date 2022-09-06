@@ -46,7 +46,7 @@ public class ArrayDeque<T> {
         nextFirst -= 1;
         size = size + 1;
         if(nextFirst == -1){
-            resize(items.length * 2);
+            resize(size * 2);
         }
     }
     /** Inserts X into the back of the list. */
