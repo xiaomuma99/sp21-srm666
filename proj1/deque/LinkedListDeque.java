@@ -3,7 +3,7 @@ package deque;
 import jh61b.junit.In;
 import java.util.Iterator;
 
-public class LinkedListDeque<T>  {
+public class LinkedListDeque<T> implements Deque<T> {
 
     private class Node {
         public T item;
@@ -43,7 +43,7 @@ public class LinkedListDeque<T>  {
     /**
      * Adds an item to the front of the deque
      */
-
+    @Override
     public void addFirst(T item){
         if(sentinel.next == sentinel){
             sentinel.next  = new Node(item, sentinel, sentinel.next);
@@ -59,7 +59,7 @@ public class LinkedListDeque<T>  {
     /**
      * Add an item to the last of the deque
      */
-
+    @Override
     public void addLast(T item){
         if(sentinel.next == sentinel){
             sentinel.prev.next = new Node(item, sentinel.prev, sentinel);
@@ -76,7 +76,7 @@ public class LinkedListDeque<T>  {
      * Returns true if deque is empty, false otherwise
      * @return
      */
-
+    @Override
     public boolean isEmpty(){
         if(sentinel.next == sentinel){
             return true;
@@ -86,6 +86,7 @@ public class LinkedListDeque<T>  {
     /**
      * Returns the number of items in the deque.
      */
+    @Override
     public int size(){
         return size;
     }
@@ -94,6 +95,7 @@ public class LinkedListDeque<T>  {
      *  Prints the items in the deque from first to last, separated by a space. Once all the items have been printed, print out a new line.
      */
 
+    @Override
     public void printDeque(){
         Node p = sentinel.next;
         for(int i = 0; i < size; i += 1){
@@ -107,6 +109,7 @@ public class LinkedListDeque<T>  {
      * @return
      */
 
+    @Override
     public T removeFirst(){
         if(sentinel.next == sentinel){
             return null;
@@ -121,6 +124,7 @@ public class LinkedListDeque<T>  {
      * Removes and returns the item at the back of the deque. If no such item exists, returns null.
      */
 
+    @Override
     public T removeLast(){
         if(sentinel.next == sentinel){
             return null;
@@ -136,6 +140,7 @@ public class LinkedListDeque<T>  {
      * Gets the item at the given index use iteration, not recursion
      */
 
+    @Override
     public T get(int index){
         Node p = sentinel.next;
         for(int i= 0; i < size; i += 1){
