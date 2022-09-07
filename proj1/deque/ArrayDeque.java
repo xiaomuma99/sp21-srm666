@@ -19,11 +19,11 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     /** Resizes the underlying array to the target capacity. */
     private void resize(int capacity) {
         T[] a = (T[]) new Object[capacity];
-        int FirstLoc = Math.abs(capacity - size) / 2;
-        System.arraycopy(items, nextFirst + 1, a, FirstLoc, size);
+        int firstLocation = Math.abs(capacity - size) / 2;
+        System.arraycopy(items, nextFirst + 1, a, firstLocation, size);
         items = a;
-        nextFirst = FirstLoc - 1;
-        nextLast = FirstLoc + size;
+        nextFirst = firstLocation - 1;
+        nextLast = firstLocation + size;
     }
     /** Gets the ith item in the list (0 is the front). */
     @Override
@@ -69,20 +69,9 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         items[nextLast] = x;
         nextLast += 1;
         size = size + 1;
-        if(nextLast == items.length){
-            resize(size*2);
+        if (nextLast == items.length) {
+            resize(size * 2);
         }
-    }
-
-    /**
-     * Determine if list is empty or not
-     */
-    @Override
-    public boolean isEmpty() {
-        if (size == 0) {
-            return true;
-        }
-        return false;
     }
     /** Returns the number of items in the list. */
     @Override
@@ -95,7 +84,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
      */
     @Override
     public void printDeque() {
-        for (int i = 0; i < size; i += 1){
+        for (int i = 0; i < size; i += 1) {
             System.out.print(get(i) + " ");
         }
         System.out.println();
@@ -106,17 +95,17 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
      */
     @Override
     public T removeFirst() {
-        if (isEmpty()){
+        if (isEmpty()) {
             return null;
         }
-        T FirstItem = items[nextFirst + 1];
+        T firstItem = items[nextFirst + 1];
         items[nextFirst + 1] = null;
         size -= 1;
         nextFirst += 1;
         if (size < items.length / 4) {
-            resize(items.length / 4); //this part: implement usage ratio: R = size/items.length, if R < 0.25, resize to 1/4 item.length, not 1/4 size.
+            resize(items.length / 4);
         }
-        return FirstItem;
+        return firstItem;
     }
 
     /** Deletes item from back of the list and
@@ -126,14 +115,14 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         if (isEmpty()) {
             return null;
         }
-        T LastItem = items[nextLast-1];
+        T lastItem = items[nextLast - 1];
         items[nextLast - 1] = null;
         nextLast -= 1;
         size = size - 1;
         if (size < items.length / 4) {
-            resize(items.length / 4); //this part: implement usage ratio: R = size/items.length, if R < 0.25, resize to 1/4 item.length, not 1/4 size.
+            resize(items.length / 4);
         }
-        return LastItem;
+        return lastItem;
     }
     /**
      * Returns whether or not the parameter o is equal to the Deque.
@@ -142,14 +131,14 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         if (o == null || !(o instanceof ArrayDeque)) {
             return false;
         }
-        if (o == this){
+        if (o == this) {
             return true;
         }
-        ArrayDeque <T> L = (ArrayDeque<T>) o;
-        if (L.size() != size){
+        ArrayDeque <T> L = (ArrayDeque <T> ) o;
+        if (L.size() != size) {
             return false;
         }
-        for (int i = 0; i<size; i++) {
+        for (int i = 0; i < size; i++) {
             if (L.get(i) != get(i)) {
                 return false;
             }
