@@ -2,7 +2,7 @@ package deque;
 
 import java.util.Iterator;
 
-public class LinkedListDeque<T> implements Deque<T> {
+public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
 
     private class Node {
         private T item;
@@ -22,12 +22,12 @@ public class LinkedListDeque<T> implements Deque<T> {
      * A constructor to create a LinkedListDeque with first item x;
      * Use on sentinel to create circular linked list
      */
-//    public LinkedListDeque(T x){
-//        sentinel = new Node(null,sentinel,sentinel);
-//        sentinel.next = new Node(x,sentinel, sentinel);
-//        sentinel.prev = sentinel.next;
-//        size = 1;
-//    }
+    public LinkedListDeque(T x) {
+        sentinel = new Node(null,sentinel,sentinel);
+        sentinel.next = new Node(x,sentinel, sentinel);
+        sentinel.prev = sentinel.next;
+        size = 1;
+    }
 
     /**
      * A constructor to create an empty LinkedListDeque
@@ -91,7 +91,8 @@ public class LinkedListDeque<T> implements Deque<T> {
     }
 
     /**
-     *  Prints the items in the deque from first to last, separated by a space. Once all the items have been printed, print out a new line.
+     *  Prints the items in the deque from first to last, separated by a space.
+     *  Once all the items have been printed, print out a new line.
      */
 
     @Override
@@ -109,7 +110,7 @@ public class LinkedListDeque<T> implements Deque<T> {
      */
 
     @Override
-    public T removeFirst(){
+    public T removeFirst() {
         if (sentinel.next == sentinel) {
             return null;
         }
@@ -142,8 +143,8 @@ public class LinkedListDeque<T> implements Deque<T> {
     @Override
     public T get(int index) {
         Node p = sentinel.next;
-        for (int i= 0; i < size; i += 1) {
-            if (i == index){
+        for (int i = 0; i<size; i += 1) {
+            if (i == index) {
                 return p.item;
             }
             p = p.next;
@@ -155,34 +156,43 @@ public class LinkedListDeque<T> implements Deque<T> {
      * Create a helper method for getRecurisve
      */
     private T getRecursive(int i, Node p) {
-        if (i == 0){
+        if (i == 0) {
             return p.item;
         }
-        return getRecursive(i-1, p.next);
+        return getRecursive(i - 1, p.next);
     }
     public T getRecursive(int index) {
         Node p = sentinel.next;
-        if (index == 0){
+        if (index == 0) {
             return p.item;
         }
         return getRecursive(index, p);
     }
+
+    /**
+     * Something I don't know, copied from Github
+     * @return
+     */
+    public Iterator<T> iterator() {
+        return new LinkedListDequeIterator();
+    }
+
     /**
      * Returns whether or not the parameter o is equal to the Deque.
      */
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
         if (o == null || !(o instanceof LinkedListDeque)) {
             return false;
         }
-        if (o == this){
+        if (o == this) {
             return true;
         }
         LinkedListDeque <T> L = (LinkedListDeque<T>) o;
-        if (L.size() != size){
+        if (L.size() != size) {
             return false;
         }
         for (int i = 0; i < size; i++){
-            if (L.get(i) != get(i)){
+            if (L.get(i) != get(i)) {
                 return false;
             }
         }
