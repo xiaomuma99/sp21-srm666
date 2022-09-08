@@ -126,22 +126,14 @@ public class ArrayDequeTest {
 
         ArrayDeque<Integer>  lld1 = new ArrayDeque<>();
         lld1.addLast(0);
-        lld1.removeLast();
-        lld1.addLast(2);
-        int result = lld1.get(0);
-        assertEquals(2, result);
-        lld1.addFirst(4);
-        int result2 = lld1.get(1);
-        assertEquals(2, result2);
-        int result3 = lld1.removeLast();
-        assertEquals(2, result3);
-        lld1.addFirst(7);
-        lld1.addFirst(8);
-        lld1.removeLast();
-        lld1.addLast(10);
+        lld1.addLast(1);
+        lld1.removeFirst();
+        lld1.addLast(3);
+        lld1.removeFirst();
         lld1.get(0);
-        lld1.get(1);
-        lld1.removeLast();
-        lld1.addFirst(15);
+        lld1.addLast(6);
+        lld1.removeFirst();
+        lld1.addLast(8);
+        lld1.addFirst(9);
     }
 }
