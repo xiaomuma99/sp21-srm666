@@ -49,13 +49,13 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             return;
         }
         if (nextFirst == 0) {
-            resize(size * 4);
+            resize(size * 2);
         }
         items[nextFirst] = x;
         size = size + 1;
         nextFirst -= 1;
         if (nextFirst == -1) {
-            resize(size * 4);
+            resize(size * 2);
         }
     }
     /** Inserts X into the back of the list. */
@@ -69,7 +69,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             return;
         }
         if (nextLast == items.length) {
-            resize(size * 4);
+            resize(size * 2);
         }
         items[nextLast] = x;
         nextLast += 1;
@@ -130,21 +130,27 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     /**
      * Returns whether or not the parameter o is equal to the Deque.
      */
+    @Override
     public boolean equals(Object o) {
-        if (o == null || !(o instanceof ArrayDeque)) {
+        if (o == null) {
             return false;
         }
         if (o == this) {
             return true;
         }
-        ArrayDeque<T> L = (ArrayDeque<T>) o;
+        if (!(o instanceof Deque)) {
+            return false;
+        }
+        Deque<T> L = (Deque<T>) o;
         if (L.size() != size) {
             return false;
         }
+        int index = nextFirst + 1;
         for (int i = 0; i < size; i++) {
-            if (L.get(i) != get(i)) {
+            if (!(items[index].equals(L.get(i)))) {
                 return false;
             }
+            index = index + 1;
         }
         return true;
     }
@@ -152,11 +158,11 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         private int index;
 
         ArrayDequeIterator() {
-            index = 0;
+            index = nextFirst + 1;
         }
 
         public boolean hasNext() {
-            return index < size;
+            return index != nextLast;
         }
 
         public T next() {

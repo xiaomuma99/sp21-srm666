@@ -137,6 +137,9 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         if (i == 0) {
             return p.item;
         }
+        if (p == sentinel) {
+            return null;
+        }
         return getRecursiveHelper(i - 1, p.next);
     }
     public T getRecursive(int index) {
@@ -157,6 +160,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     /**
      * Returns whether or not the parameter o is equal to the Deque.
      */
+    @Override
     public boolean equals(Object o) {
         if (o == null) {
             return false;
@@ -164,10 +168,10 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         if (o == this) {
             return true;
         }
-        if (!(o instanceof LinkedListDeque)){
+        if (!(o instanceof Deque)) {
             return false;
         }
-        LinkedListDeque<T> L = (LinkedListDeque<T>) o;
+        Deque<T> L = (Deque<T>) o;
         if (L.size() != size) {
             return false;
         }
@@ -186,7 +190,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         }
 
         public boolean hasNext() {
-            return p == sentinel;
+            return p != sentinel;
         }
 
         public T next() {
