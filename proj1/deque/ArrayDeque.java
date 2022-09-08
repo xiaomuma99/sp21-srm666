@@ -48,8 +48,8 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             size += 1;
             return;
         }
-        if (nextFirst == 0) {
-            resize(size * 2);
+        if (nextFirst == -1 && size == 1) {
+            resize(8);
         }
         items[nextFirst] = x;
         size = size + 1;
