@@ -34,9 +34,6 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         return (items[i + nextFirst + 1]);
 
     }
-    public Iterator<T> iterator() {
-        return new ArrayDequeIterator();
-    }
 
     /** Inserts X into the front of the list. */
     @Override
@@ -154,15 +151,23 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         }
         return true;
     }
+    /**
+     * The Deque objects we’ll make are iterable (i.e. Iterable<T>)
+     * so we must provide this method to return an iterator.
+     */
+    @Override
+    public Iterator<T> iterator() {
+        return new ArrayDequeIterator();
+    }
     private class ArrayDequeIterator implements Iterator<T> {
         private int index;
 
         ArrayDequeIterator() {
-            index = nextFirst + 1;
+            index = 0;
         }
 
         public boolean hasNext() {
-            return index != nextLast;
+            return index < size;
         }
 
         public T next() {
