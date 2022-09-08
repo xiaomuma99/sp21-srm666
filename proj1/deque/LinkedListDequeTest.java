@@ -2,6 +2,7 @@ package deque;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+import edu.princeton.cs.algs4.StdRandom;
 
 
 /** Performs some basic linked list tests. */
@@ -130,4 +131,47 @@ public class LinkedListDequeTest {
 
 
     }
+    @Test
+    public void randomLLDequeRemoveTest() {
+
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<>();
+        ArrayDeque<Integer> lld2 = new ArrayDeque<>();
+        int N = 500;
+        for (int i = 0; i < N; i += 1) {
+            int operationNumber = StdRandom.uniform(0,  4);
+            if (operationNumber == 0) {
+                // addLast
+                int randVal = StdRandom.uniform(0, 50);
+                lld1.addLast(randVal);
+                lld2.addLast(randVal);
+                System.out.println("addLast(" + randVal + ")");
+                System.out.println("L2 addLast(" + randVal + ")");
+            } else if (operationNumber == 1) {
+                // size
+                int size = lld1.size();
+                int size_L2 = lld2.size();
+                System.out.println("size: " + size);
+                assertEquals(size, size_L2);
+            } else if (operationNumber == 2) {
+                    //removeLast
+                if(lld1.size()>0 && lld2.size() >0){
+                    int result = lld1.removeLast();
+                    int result_L2 = lld2.removeLast();
+                    System.out.println("removeLast:(" + result+")");
+                    System.out.println("L2 removeLast:(" + result_L2+")");
+                    assertEquals(result, result_L2);
+                }
+            } else if (operationNumber == 3) {
+                //addFirst
+                int randVal = StdRandom.uniform(0, 50);
+                lld1.addFirst(randVal);
+                lld2.addFirst(randVal);
+                System.out.println("addLast(" + randVal + ")");
+                System.out.println("L2 addLast(" + randVal + ")");
+            }
+        }
+    }
+
+
+
 }

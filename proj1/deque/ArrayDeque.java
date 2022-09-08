@@ -42,36 +42,39 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     @Override
     public void addFirst(T x) {
         if (isEmpty()) {
+            resize(8);
             items[nextFirst] = x;
             nextFirst -= 1;
             size += 1;
             return;
         }
-        T[] a = (T[]) new Object[items.length];
-        System.arraycopy(items, 0, a, 0, items.length);
-        a[nextFirst] = x;
-        items = a;
-        nextFirst -= 1;
+        if (nextFirst == 0) {
+            resize(size * 4);
+        }
+        items[nextFirst] = x;
         size = size + 1;
+        nextFirst -= 1;
         if (nextFirst == -1) {
-            resize(size * 2);
+            resize(size * 4);
         }
     }
     /** Inserts X into the back of the list. */
     @Override
     public void addLast(T x) {
         if (isEmpty()) {
+            resize(8);
             items[nextLast] = x;
             size += 1;
             nextLast += 1;
             return;
         }
+        if (nextLast == items.length) {
+            resize(size * 4);
+        }
         items[nextLast] = x;
         nextLast += 1;
         size = size + 1;
-        if (nextLast == items.length) {
-            resize(size * 2);
-        }
+
     }
     /** Returns the number of items in the list. */
     @Override
@@ -102,8 +105,8 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         items[nextFirst + 1] = null;
         size -= 1;
         nextFirst += 1;
-        if (size < items.length / 4) {
-            resize(items.length / 4);
+        if (size < items.length / 4 && size >= 4) {
+            resize(size * 2);
         }
         return firstItem;
     }
@@ -119,8 +122,8 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         items[nextLast - 1] = null;
         nextLast -= 1;
         size = size - 1;
-        if (size < items.length / 4) {
-            resize(items.length / 4);
+        if (size < items.length / 4 && size >= 4) {
+            resize(size * 2);
         }
         return lastItem;
     }
