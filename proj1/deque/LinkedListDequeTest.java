@@ -136,12 +136,12 @@ public class LinkedListDequeTest {
 
         LinkedListDeque<Integer> lld1 = new LinkedListDeque<>();
         ArrayDeque<Integer> lld2 = new ArrayDeque<>();
-        int N = 500;
+        int N = 1000;
         for (int i = 0; i < N; i += 1) {
             int operationNumber = StdRandom.uniform(0,  4);
             if (operationNumber == 0) {
                 // addLast
-                int randVal = StdRandom.uniform(0, 50);
+                int randVal = StdRandom.uniform(0, 1000);
                 lld1.addLast(randVal);
                 lld2.addLast(randVal);
                 System.out.println("addLast(" + randVal + ")");
@@ -153,12 +153,12 @@ public class LinkedListDequeTest {
                 System.out.println("size: " + size);
                 assertEquals(size, size_L2);
             } else if (operationNumber == 2) {
-                    //removeLast
+                    //removeFirst
                 if(lld1.size()>0 && lld2.size() >0){
-                    int result = lld1.removeLast();
-                    int result_L2 = lld2.removeLast();
-                    System.out.println("removeLast:(" + result+")");
-                    System.out.println("L2 removeLast:(" + result_L2+")");
+                    int result = lld1.removeFirst();
+                    int result_L2 = lld2.removeFirst();
+                    System.out.println("removeFirst:(" + result+")");
+                    System.out.println("L2 removeFirst:(" + result_L2+")");
                     assertEquals(result, result_L2);
                 }
             } else if (operationNumber == 3) {
@@ -170,6 +170,22 @@ public class LinkedListDequeTest {
                 System.out.println("L2 addLast(" + randVal + ")");
             }
         }
+    }
+    @Test
+    public void randomLLDequeTest() {
+
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<>();
+        lld1.addLast(0);
+        System.out.println(lld1.isEmpty());
+        System.out.println(lld1.isEmpty());
+        System.out.println(lld1.isEmpty());
+        lld1.addLast(4);
+        int result = lld1.removeFirst();
+        assertEquals(result,0);
+        lld1.addLast(6);
+        lld1.addLast(7);
+        int result2 = lld1.removeFirst();
+        assertEquals(result2,4);
     }
 
 

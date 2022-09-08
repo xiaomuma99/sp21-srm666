@@ -94,7 +94,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         }
         T result = sentinel.next.item;
         sentinel.next = sentinel.next.next;
-        sentinel.next.next.prev = sentinel;
+        sentinel.next.prev = sentinel;
         size -= 1;
         return result;
     }
