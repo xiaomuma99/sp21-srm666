@@ -149,13 +149,6 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         return getRecursiveHelper(index, sentinel.next);
     }
 
-    /**
-     * Something I don't know, copied from Github
-     * @return
-     */
-    public Iterator<T> iterator() {
-        return new LinkedListDequeIterator();
-    }
 
     /**
      * Returns whether or not the parameter o is equal to the Deque.
@@ -182,6 +175,19 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         }
         return true;
     }
+
+    /**
+     * Something I don't know, copied from Github
+     * After learned lecture 6.4, I figured it out
+     * First, we need to add an iterator() method to the class to return an Iterator T
+     * The Iterator T returned should have a useful hasNext() and next() method
+     * Add implements Iterable T to the line definning your class
+     * @return
+     */
+    public Iterator<T> iterator() {
+        return new LinkedListDequeIterator();
+    }
+
     private class LinkedListDequeIterator implements Iterator<T> {
         private Node p;
 
