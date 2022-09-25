@@ -112,5 +112,15 @@ public class TestBSTMapExtra {
         assertEquals(0, noChild.size());
         assertEquals(null, noChild.get('Z'));
     }
+    @Test
+    public void testprintInOrder() {
+        BSTMap<String,String> q = new BSTMap<String,String>();
+        q.put("c","a");
+        q.put("b","a");
+        q.put("a","a");
+        q.put("d","a");
+        q.put("e","a");                         // a b c d e
+        q.printInOrder();
+    }
 
 }

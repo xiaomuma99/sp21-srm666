@@ -1,0 +1,4 @@
+class bstmap.ULLMap: 0.66 sec
+class bstmap.BSTMap: 0.02 sec
+Java's Built-in TreeMap: 0.02 sec
+Java's Built-in HashMap: 0.02 sec
