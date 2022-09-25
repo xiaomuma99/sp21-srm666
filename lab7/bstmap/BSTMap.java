@@ -30,7 +30,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K,V> {
     /**
      * Return true if this symbol table is empty
      */
-    public boolean isEmpty() {
+    private boolean isEmpty() {
         return size() == 0;
     }
 
@@ -57,7 +57,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K,V> {
      * return 0 if this .key equal to other key
      * return negative if this key smaller than other key
      */
-    public int compareTo(K otherKey) {
+    private int compareTo(K otherKey) {
         return this.compareTo(otherKey);
     }
 
@@ -221,7 +221,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K,V> {
     /**
      * remove the largest item from tree
      */
-    public void removeMax() {
+    private void removeMax() {
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
@@ -239,7 +239,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K,V> {
     /**
      * remove the smallest item from tree
      */
-    public void removeMin() {
+    private void removeMin() {
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
