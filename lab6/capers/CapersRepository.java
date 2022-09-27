@@ -18,7 +18,9 @@ public class CapersRepository {
     static final File CWD = new File(System.getProperty("user.dir"));
 
     /** Main metadata folder. */
-    static final File CAPERS_FOLDER = null; // TODO Hint: look at the `join`
+    static final File CAPERS_FOLDER = Utils.join(CWD, ".capers");
+    static final File DOG_FOLDER = Utils.join(CAPERS_FOLDER, "dogs");
+    // TODO Hint: look at the `join`
                                             //      function in Utils
 
     /**
@@ -32,15 +34,30 @@ public class CapersRepository {
      */
     public static void setupPersistence() {
         // TODO
+        CAPERS_FOLDER.mkdir();
+        DOG_FOLDER.mkdir();
     }
 
     /**
      * Appends the first non-command argument in args
      * to a file called `story` in the .capers directory.
      * @param text String of the text to be appended to the story
+     * In the beginning, I don't know how to append a string to another.
+     * Step1 read existing file, step2 plus content and write
      */
     public static void writeStory(String text) {
         // TODO
+        File outFile = join(CAPERS_FOLDER,"story");
+        String tmpStory;
+        if (!outFile.exists()) {
+            tmpStory = text;
+        } else {
+            tmpStory = readContentsAsString(outFile);
+            tmpStory = tmpStory + "\n" + text;
+        }
+        writeContents(outFile, tmpStory);
+        System.out.println(tmpStory);
+
     }
 
     /**
@@ -50,6 +67,10 @@ public class CapersRepository {
      */
     public static void makeDog(String name, String breed, int age) {
         // TODO
+        Dog uddadog = new Dog(name, breed, age);
+        uddadog.saveDog();
+        System.out.println(uddadog.toString());
+
     }
 
     /**
@@ -60,5 +81,10 @@ public class CapersRepository {
      */
     public static void celebrateBirthday(String name) {
         // TODO
+        Dog uddadog = Dog.fromFile(name);
+        if (uddadog != null) {
+            uddadog.haveBirthday();
+            uddadog.saveDog();
+        }
     }
 }

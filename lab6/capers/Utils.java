@@ -4,7 +4,6 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -12,11 +11,6 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.Formatter;
-import java.util.List;
 
 
 /** Assorted utilities.
@@ -75,13 +69,13 @@ class Utils {
     /** Return an object of type T read from FILE, casting it to EXPECTEDCLASS.
      *  Throws IllegalArgumentException in case of problems. */
     static <T extends Serializable> T readObject(File file,
-                                                 Class<T> expectedClass) {
+                                                 Class<Dog> expectedClass) {
         try {
             ObjectInputStream in =
                     new ObjectInputStream(new FileInputStream(file));
-            T result = expectedClass.cast(in.readObject());
+            Dog result = expectedClass.cast(in.readObject());
             in.close();
-            return result;
+            return (T) result;
         } catch (IOException | ClassCastException
                 | ClassNotFoundException excp) {
             throw new IllegalArgumentException(excp.getMessage());
