@@ -210,7 +210,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K,V> {
                 return x.right;
             }
             Node t = x;
-            x = min(t.right);
+            x = min(t.right);//find left most node in the right tree.
             x.right = removeMin(t.right);
             x.left = t.left;
         }
@@ -255,13 +255,13 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K,V> {
     }
 
     /**
-     * find the smallest key in the tree;
+     * find the smallest key in the tree;(or so-called the left most node)
      */
     private Node min(Node x) {
         if (x.left == null) {
             return x;
         }
-        return min(x.right);
+        return min(x.left);
     }
 
     @Override
