@@ -1,5 +1,6 @@
 package hashmap;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -43,7 +44,7 @@ public class MyHashMapPQBuckets<K extends Comparable<K>, V> extends MyHashMap<K,
     }
 
     @Override
-    protected Collection<Node> createBucket() {
+    protected Collection<MyHashMap<K, V>.Node> createBucket() {
         // This is fancy new-fangled Java that says in plain English:
         //
         //  "Build a PriorityQueue of Nodes, and when you compare two Nodes,

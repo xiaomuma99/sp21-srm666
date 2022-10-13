@@ -1,7 +1,6 @@
 package hashmap;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Hash Table with Array List buckets
@@ -39,7 +38,7 @@ public class MyHashMapALBuckets<K, V> extends MyHashMap<K, V> {
     }
 
     @Override
-    protected Collection<Node> createBucket() {
+    protected ArrayList<MyHashMap<K, V>.Node> createBucket() {
         return new ArrayList<>();
     }
 }

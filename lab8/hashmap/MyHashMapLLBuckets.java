@@ -1,7 +1,8 @@
 package hashmap;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 
 /**
  * Hash Table with Linked List buckets
@@ -39,7 +40,7 @@ public class MyHashMapLLBuckets<K, V> extends MyHashMap<K, V> {
     }
 
     @Override
-    protected Collection<Node> createBucket() {
+    protected Collection<MyHashMap<K, V>.Node> createBucket() {
         return new LinkedList<>();
     }
 }
