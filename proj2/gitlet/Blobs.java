@@ -3,31 +3,41 @@ package gitlet;
 import java.io.File;
 import java.io.Serializable;
 
-import static gitlet.Utils.join;
-import static gitlet.Utils.restrictedDelete;
+import static gitlet.Repository.BLOBS_FOLDER;
+import static gitlet.Utils.*;
 
 public class Blobs implements Serializable {
 
-    /** The current working directory. */
-    public static final File CWD = new File(System.getProperty("user.dir"));
-    public static final File GITLET_FOLDER = Utils.join(CWD,".gitlet");
-    public static final File BLOBS_FOLDER = Utils.join(GITLET_FOLDER,"Blobs");
-    public static final File STAGE_DIR = join(GITLET_FOLDER,"staging");
-    public static final File STAGE_REMOVE_DIR = join(GITLET_FOLDER, "staging_remove");
-
     /**
-     * file name, Sha1 hashcode of file;
+     * The current working directory.
      */
-    public String filename;
 
-    /**
-     * Staging status
-     */
-    public String status;
+    private String blobId; //file name, Sha1 hashcode of file;
+    private final byte[] contents;//byte[] contents
 
-    public Blobs (String filename) {
-       this.filename = filename;
+
+    public Blobs(byte[] contents) {
+        this.contents = contents;
+        this.blobId = calcHash();
     }
+    /**
+     * Get blobID
+     */
+    public String getBlobId() {
+        return blobId;
+    }
+    /**
+     * Save Blob to file
+     */
+    public void save() {
+        File outFile = join(BLOBS_FOLDER, blobId);
+        Utils.writeContents(outFile, contents);
+    }
+
+    private String calcHash() {
+        return sha1(this.contents);
+    }
+
     /**
      * Create a general reads in helper method
      * Reads in and deserializes a blob from a file with name FILENAME in given folder
@@ -39,33 +49,5 @@ public class Blobs implements Serializable {
             return uddablob;
         }
         return null;
-    }
-
-    /**
-     * Create a general write-in helper method
-     * save file to given folder
-     */
-    public void saveBlob(File DIR) {
-        String filenamehash = Utils.sha1(this);
-        File outFile = Utils.join(DIR, filenamehash);
-        Blobs uddablob = this;
-        Utils.writeObject(outFile,uddablob);
-    }
-
-    /**
-     * remove all file from Staging area
-     */
-    public static void clearBlobFromStage() {
-        java.util.List<String> workFile = Utils.plainFilenamesIn(STAGE_DIR);
-        for (int i = 0; i < workFile.size(); i++) {
-            restrictedDelete(workFile.get(i));
-        }
-    }
-
-    /**
-     * Update Staging status
-     */
-    public void updateStatus(String s) {
-        status = s;
     }
 }

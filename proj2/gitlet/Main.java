@@ -1,7 +1,7 @@
 package gitlet;
 
 /** Driver class for Gitlet, a subset of the Git version-control system.
- *  @author TODO
+ *  @author Morris Ma
  */
 public class Main {
 
@@ -13,43 +13,70 @@ public class Main {
         if (args.length == 0) {
             Utils.exitWithError("Please enter a command");
         }
-        if (!Utils.plainFilenamesIn(Repository.CWD).contains(".gitlet")) {
-            Utils.exitWithError("Not in an initialized Gitlet directory.");
-        }
         String firstArg = args[0];
-        String commitID;
-        String filename;
         switch(firstArg) {
             case "init":
                 // TODO: handle the `init` command
+                validateNumArgs(args, 1);
                 Repository.initFolder();
                 break;
             case "add":
                 // TODO: handle the `add [filename]` command
+                validateCWD();
+                validateNumArgs(args, 2);
                 Repository.addFile(args[1]);
                 break;
             // TODO: FILL THE REST IN
             case "commit":
                 //TODO: handle the 'commit [message]' command
+                validateCWD();
+                validateNumArgs(args, 2);
                 Repository.submitCommit(args[1]);
                 break;
             case "checkout":
                 //TODO: handle the "checkout -- [file name]"
                 //TODO: checkout "[commit id] -- [filename]"
                 //TODO: also handle the 'checkout [branch name]'
-                commitID = args[1];
-                filename = args[2];
-                Repository.checkoutfile(commitID,filename);
+                validateCWD();
+                Repository.checkoutFile(args);
                 break;
             case "rm":
                 //TODO: handle the 'rm' command
+                validateCWD();
+                validateNumArgs(args, 1);
                 Repository.unstageFile(args[1]);
             case "log":
                 //TODO: handle the 'log' command
+                validateCWD();
+                validateNumArgs(args, 1);
                 Repository.printoutLog();
+                break;
+            case "global-log":
+                //TODO: handle the 'log' command
+                validateCWD();
+                validateNumArgs(args, 1);
+                Repository.printoutGlobalLog();
                 break;
             default:
                 Utils.exitWithError("No command with that name exists.");
+        }
+        return;
+    }
+    /**
+     * Checks the number of arguments versus the expected number,
+     * throws a RuntimeException if they do not match.
+     * @param args Argument array from command line
+     * @param n Number of expected arguments
+     */
+    public static void validateNumArgs(String[] args, int n) {
+        if (args.length != n) {
+            throw new RuntimeException(
+                    String.format("Invalid number of arguments"));
+        }
+    }
+    public static void validateCWD() {
+        if (!Repository.GITLET_DIR.exists()) {
+            Utils.exitWithError("Not in an initialized Gitlet directory.");
         }
     }
 }
