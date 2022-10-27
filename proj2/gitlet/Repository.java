@@ -5,17 +5,14 @@ import java.util.*;
 
 import static gitlet.Utils.*;
 
-// TODO: any imports you need here
 
 /** Represents a gitlet repository.
- *  TODO: It's a good idea to give a description here of what else this Class
  *  does at a high level.
  *
  *  @author Morris Ma
  */
 public class Repository {
     /**
-     * TODO: add instance variables here.
      *
      * List all instance variables of the Repository class here with a useful
      * comment above them describing what that variable represents and how that
@@ -30,7 +27,6 @@ public class Repository {
     /** The head pointer, always point to current commit.*/
     //public static String headCommitId; //this does not work, it not stay if we excute other program
 
-    /* TODO: fill in the rest of this class. */
     /**
 
     /**
@@ -59,8 +55,8 @@ public class Repository {
         StagingArea stagingArea = new StagingArea();
         stagingArea.save();
 
-        String CommitId = initialCommit.getCommitId();
-        Branch.setCommitId("master", CommitId);
+        String commitId = initialCommit.getCommitId();
+        Branch.setCommitId("master", commitId);
         HEAD.setBranchName("master");
 
     }
@@ -79,20 +75,20 @@ public class Repository {
         // the version in the current commit, do not stage it to be added
 
         Commit currentCommit = Commit.getCommitById(Branch.getCommitId(HEAD.getBranchName()));
-        String BlobId = uddablob.getBlobId();
+        String blobId = uddablob.getBlobId();
         StagingArea stagingArea = StagingArea.load();
-        if (currentCommit.getBlobs().containsKey(BlobId)) {
+        if (currentCommit.getBlobs().containsKey(blobId)) {
             stagingArea.clear();
             stagingArea.save();
             return;
         }
         //remove it from the staging area if it is already there(as can happen when
         // a file is changed, added, and then changed back to it’s original version).
-        if (stagingArea.getAddition().containsKey(BlobId)) {
+        if (stagingArea.getAddition().containsKey(blobId)) {
             stagingArea.getAddition().remove(filename);
         }
         //otherwise add file into stagingArea
-        stagingArea.getAddition().put(filename, BlobId);
+        stagingArea.getAddition().put(filename, blobId);
         uddablob.save();
         stagingArea.save();
     }
@@ -107,7 +103,8 @@ public class Repository {
         submitCommit(message, currentCommitId, null);
     }
 
-    private static void submitCommit(String message, String currentCommitId, String mergedCommitId) {
+    private static void submitCommit(String message, String currentCommitId,
+                                     String mergedCommitId) {
         StagingArea stagingArea = StagingArea.load();
         if (message.isEmpty()) {
             Utils.exitWithError("Please enter a commit message.");
@@ -116,9 +113,10 @@ public class Repository {
         if (stagingArea.getAddition().isEmpty() && stagingArea.getRemoval().isEmpty()) {
             Utils.exitWithError("No changes added to the commit.");
         }
-        Commit newCommit = new Commit(message,currentCommitId,mergedCommitId);
-        //A commit will only update the contents of files it is tracking that have been staged for addition at the time of commit
-        for (Map.Entry<String, String> entry : stagingArea.getAddition().entrySet() ) {
+        Commit newCommit = new Commit(message, currentCommitId, mergedCommitId);
+        //A commit will only update the contents of files it is tracking
+        // that have been staged for addition at the time of commit
+        for (Map.Entry<String, String> entry : stagingArea.getAddition().entrySet()) {
             String fileName = entry.getKey();
             String blobId = entry.getValue();
             newCommit.getBlobs().put(fileName, blobId);
@@ -140,7 +138,7 @@ public class Repository {
     public static void unstageFile(String filename) {
         StagingArea stagingArea = StagingArea.load();
         Commit currentCommit = Commit.getCommitById(Branch.getCommitId(HEAD.getBranchName()));
-        File file = join(CWD,filename);
+        File file = join(CWD, filename);
         if (stagingArea.getAddition().containsKey(filename)) {
             stagingArea.getAddition().remove(filename);
             stagingArea.save();
@@ -232,7 +230,7 @@ public class Repository {
         }
         //case2: checkout [commit id] -- [filename] command
         if (args.length == 4) {
-            if (!args[2].equals("--") ) {
+            if (!args[2].equals("--")) {
                 exitWithError("Incorrect operands");
             }
             checkoutFile(args[1], args[3]);
@@ -249,7 +247,8 @@ public class Repository {
                 return;
             }
             if (isUntrackedFiles()) {
-                exitWithError("There is an untracked file in the way; delete it, or add and commit it first. ");
+                exitWithError("There is an untracked file in the way; delete it, " +
+                        "or add and commit it first. ");
             }
             Commit commit = Commit.getCommitById(commitId);
             checkoutFile(commit);
@@ -286,7 +285,8 @@ public class Repository {
         List<String> fileList = plainFilenamesIn(CWD);
         StagingArea stagingArea = StagingArea.load();
         for (String filename : fileList) {
-            if (stagingArea.getAddition().containsKey(filename) || stagingArea.getRemoval().contains(filename)) {
+            if (stagingArea.getAddition().containsKey(filename) ||
+                    stagingArea.getRemoval().contains(filename)) {
                 return true;
             }
         }
@@ -301,14 +301,15 @@ public class Repository {
             exitWithError("A branch with that name already exists. ");
         }
         String currentCommitId = Branch.getCommitId(HEAD.getBranchName());
-        Branch.setCommitId(branchName,currentCommitId);
+        Branch.setCommitId(branchName, currentCommitId);
 
     }
     /**
      * Execute rm-branch [branch Name] command
      * Deletes the branch with the given name.
      * This only means to delete the pointer associated with the branch;
-     * it does not mean to delete all commits that were created under the branch, or anything like that.
+     * it does not mean to delete all commits that were
+     * created under the branch, or anything like that.
      */
     public static void removeBranch(String branchName) {
         if (!join(Branch.BRANCHE_DIR, branchName).exists()) {

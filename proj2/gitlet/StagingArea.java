@@ -11,7 +11,7 @@ public class StagingArea implements Serializable {
 
     public static final File STAGE_FILE = join(Repository.GITLET_DIR, "/staging");
 
-    private HashMap<String, String> addition;//Use Map to store key-pairs <filename, blobID>
+    private HashMap<String, String> addition; //Use Map to store key-pairs <filename, blobID>
     private HashSet<String> removal;
     /** Constructor. */
     public StagingArea() {

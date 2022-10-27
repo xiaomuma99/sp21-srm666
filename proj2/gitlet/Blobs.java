@@ -38,16 +38,4 @@ public class Blobs implements Serializable {
         return sha1(this.contents);
     }
 
-    /**
-     * Create a general reads in helper method
-     * Reads in and deserializes a blob from a file with name FILENAME in given folder
-     */
-    public static Blobs fromFile(String filename, File DIR) {
-        File inFile = Utils.join(DIR, filename);
-        if (inFile.exists()) {
-            Blobs uddablob = Utils.readObject(inFile, Blobs.class);
-            return uddablob;
-        }
-        return null;
-    }
 }
