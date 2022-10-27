@@ -135,14 +135,25 @@ public class Repository {
 
     /**
      * Unstage the file if it is currently staged for addition
+     * rm command
      */
     public static void unstageFile(String filename) {
-        Blobs uddablob = Blobs.fromFile(filename, StagingArea.STAGE_FILE);
-        if (uddablob == null) {
-            exitWithError("No reason to remove the file.");
+        StagingArea stagingArea = StagingArea.load();
+        Commit currentCommit = Commit.getCommitById(Branch.getCommitId(HEAD.getBranchName()));
+        File file = join(CWD,filename);
+        if (stagingArea.getAddition().containsKey(filename)) {
+            stagingArea.getAddition().remove(filename);
+            stagingArea.save();
+            return;
+
         }
-        uddablob.save();
-        restrictedDelete(filename);
+        if (currentCommit.getBlobs().containsKey(filename)) {
+            stagingArea.getRemoval().add(filename);
+            restrictedDelete(file);
+            stagingArea.save();
+            return;
+        }
+        exitWithError("No reason to remove the file");
     }
     /** Execute Log command. */
     public static void printoutLog() {
@@ -173,6 +184,40 @@ public class Repository {
         }
     }
     /**
+     * Execute status command.
+     * Displays what branches currently exist, and marks the current branch with a *.
+     * Also displays what files have been staged for addition or removal.
+     */
+    public static void printStatus() {
+
+        //print out branch files
+        String branchName = HEAD.getBranchName();
+        List<String> branches = plainFilenamesIn(Branch.BRANCHE_DIR);
+        System.out.println("=== Branches ===");
+        System.out.println("*" + branchName);
+        for (String branch : branches) {
+            if (!branch.equals(branchName)) {
+                System.out.println(branch);
+            }
+        }
+
+        //print out Staged File
+        System.out.println("=== Staged Files ===");
+        StagingArea stagingArea = StagingArea.load();
+        for (Map.Entry<String, String> entry : stagingArea.getAddition().entrySet()) {
+            System.out.println(entry.getKey());
+        }
+
+        //print out removed File
+        System.out.println("=== Removed Files ===");
+        for (String filename : stagingArea.getRemoval()) {
+            System.out.println(filename);
+        }
+        //print out Modification Not Staged For Commit file
+
+        //print out Untracked file
+    }
+    /**
      * Execute checkout -- [filename] command
      * Execute checkout [commit id] -- [filename] command
      */
@@ -193,6 +238,24 @@ public class Repository {
             checkoutFile(args[1], args[3]);
         }
         //case3: checkout [branch name]
+        if (args.length == 2) {
+            String commitId = Branch.getCommitId(args[1]);
+            if (commitId == null) {
+                exitWithError("No commit with that id exists. ");
+                return;
+            }
+            if (args[1].equals(HEAD.getBranchName())) {
+                exitWithError("No need to checkout the current branch. ");
+                return;
+            }
+            if (isUntrackedFiles()) {
+                exitWithError("There is an untracked file in the way; delete it, or add and commit it first. ");
+            }
+            Commit commit = Commit.getCommitById(commitId);
+            checkoutFile(commit);
+            HEAD.setBranchName(args[1]);
+
+        }
 
     }
     private static void checkoutFile(String commitId, String filename) {
@@ -210,7 +273,80 @@ public class Repository {
         writeContents(join(CWD, filename), contents);
     }
     private static void checkoutFile(Commit commit) {
+        for (Map.Entry<String, String> entry : commit.getBlobs().entrySet()) {
+            String blobId = entry.getKey();
+            String filename = entry.getValue();
+            byte[] contents = readContents(join(BLOBS_FOLDER, blobId));
+            writeContents(join(CWD, filename), contents);
+        }
 
     }
 
+    private static boolean isUntrackedFiles() {
+        List<String> fileList = plainFilenamesIn(CWD);
+        StagingArea stagingArea = StagingArea.load();
+        for (String filename : fileList) {
+            if (stagingArea.getAddition().containsKey(filename) || stagingArea.getRemoval().contains(filename)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+     * Execute branch [branch Name] command
+     * Creates a new branch with the given name, and points it at the current head commit.
+     */
+    public static void createBranch(String branchName) {
+        if (join(Branch.BRANCHE_DIR, branchName).exists()) {
+            exitWithError("A branch with that name already exists. ");
+        }
+        String currentCommitId = Branch.getCommitId(HEAD.getBranchName());
+        Branch.setCommitId(branchName,currentCommitId);
+
+    }
+    /**
+     * Execute rm-branch [branch Name] command
+     * Deletes the branch with the given name.
+     * This only means to delete the pointer associated with the branch;
+     * it does not mean to delete all commits that were created under the branch, or anything like that.
+     */
+    public static void removeBranch(String branchName) {
+        if (!join(Branch.BRANCHE_DIR, branchName).exists()) {
+            exitWithError("A branch with that name does not exist. ");
+            return;
+        }
+        if (HEAD.getBranchName().equals(branchName)) {
+            exitWithError("Cannot remove the current branch. ");
+            return;
+        }
+        List<String> branches = plainFilenamesIn(Branch.BRANCHE_DIR);
+        for (String branch : branches) {
+            if (branch.equals(branchName)) {
+                File file = join(Branch.BRANCHE_DIR, branchName);
+                restrictedDelete(file);
+            }
+        }
+    }
+    /**
+     * Execute reset command
+     * Checks out all the files tracked by the given commit.
+     * Removes tracked files that are not present in that commit.
+     * Also moves the current branch’s head to that commit node.
+     */
+    public static void reset(String commitId) {
+        Commit commit = Commit.getCommitById(commitId);
+        if (commit == null) {
+            exitWithError("No commit with that id exists. ");
+            return;
+        }
+        checkoutFile(commit);
+        Branch.setCommitId(HEAD.getBranchName(), commitId);
+    }
+    /**
+     * Excute merge command
+     * Merges files from the given branch into the current branch.
+     */
+    public static void mergeBranch(String branchName) {
+        return;
+    }
 }

@@ -57,6 +57,36 @@ public class Main {
                 validateNumArgs(args, 1);
                 Repository.printoutGlobalLog();
                 break;
+            case "find":
+                //TODO: handle the 'find' command
+                validateCWD();
+                validateNumArgs(args, 2);
+                Repository.find(args[1]);
+            case "status":
+                //TODO: handle the 'status' command
+                validateCWD();
+                validateNumArgs(args, 1);
+                Repository.printStatus();
+            case "branch":
+                //TODO: handle the 'branch' command
+                validateCWD();
+                validateNumArgs(args, 2);
+                Repository.createBranch(args[1]);
+            case "rm-branch":
+                //TODO: handle the 'rm-branch' command
+                validateCWD();
+                validateNumArgs(args, 2);
+                Repository.removeBranch(args[1]);
+            case "reset":
+                //TODO: handle the 'reset' command
+                validateCWD();
+                validateNumArgs(args, 2);
+                Repository.reset(args[1]);
+            case "merge":
+                //TODO: handle the 'merge' command
+                validateCWD();
+                validateNumArgs(args, 2);
+                Repository.mergeBranch(args[1]);
             default:
                 Utils.exitWithError("No command with that name exists.");
         }
