@@ -25,8 +25,8 @@ public class Repository {
     public static final File BLOBS_FOLDER = join(GITLET_DIR, "Blobs");
 
     /** The head pointer, always point to current commit.*/
-    //public static String headCommitId; //this does not work, it not stay if we excute other program
-
+    //public static String headCommitId;
+    // this does not work, it not stay if we excute other program
     /**
 
     /**
@@ -40,7 +40,8 @@ public class Repository {
 
     public static void initFolder() {
         if (GITLET_DIR.exists()) {
-            Utils.exitWithError("A Gitlet version-control system already exists in the current directory.");
+            Utils.exitWithError("A Gitlet version-control system " +
+                    "already exists in the current directory.");
             return;
         }
         GITLET_DIR.mkdir();
@@ -286,8 +287,8 @@ public class Repository {
         List<String> fileList = plainFilenamesIn(CWD);
         StagingArea stagingArea = StagingArea.load();
         for (String filename : fileList) {
-            if (stagingArea.getAddition().containsKey(filename) ||
-                    stagingArea.getRemoval().contains(filename)) {
+            if (stagingArea.getAddition().containsKey(filename)
+                    || stagingArea.getRemoval().contains(filename)) {
                 return true;
             }
         }

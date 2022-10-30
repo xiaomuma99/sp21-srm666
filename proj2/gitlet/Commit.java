@@ -44,7 +44,7 @@ public class Commit implements Serializable {
         blobs = new HashMap<>();
         this.firstParentID = null;
         this.secondParentID = null;
-        this.commitId = calcHash();//commitId = sha1(this) will crash the program;
+        this.commitId = calcHash(); //commitId = sha1(this) will crash the program;
     }
     public Commit(String message, String firstParentID, String secondParentID) {
         this.message = message;
@@ -99,7 +99,7 @@ public class Commit implements Serializable {
     /** Return Commit object by commitId. */
     public static Commit getCommitById(String commitId) {
         List<String> commitFileList = Utils.plainFilenamesIn(COMMIT_FOLDER);
-        for (int i = 0; i < commitFileList.size(); i++ ) {
+        for (int i = 0; i < commitFileList.size(); i++) {
             if (commitFileList.get(i).equals(commitId)) {
                 break;
             }
@@ -130,7 +130,7 @@ public class Commit implements Serializable {
     /**Copy from Github. */
     public String toString() {
         String dummyString = "===\n";
-        String commitString = String.format("commit %s\n",commitId);
+        String commitString = String.format("commit %s\n", commitId);
 
         String pattern = "EEE MMM dd HH:mm:ss yyyy Z";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, new Locale("en", "US"));

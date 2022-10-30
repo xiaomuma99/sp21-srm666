@@ -13,7 +13,7 @@ public class Blobs implements Serializable {
      */
 
     private String blobId; //file name, Sha1 hashcode of file;
-    private final byte[] contents;//byte[] contents
+    private final byte[] contents; //byte[] contents
 
 
     public Blobs(byte[] contents) {
