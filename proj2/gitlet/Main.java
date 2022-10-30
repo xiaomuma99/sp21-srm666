@@ -43,8 +43,8 @@ public class Main {
             case "rm":
                 //TODO: handle the 'rm' command
                 validateCWD();
-                validateNumArgs(args, 1);
-                Repository.unstageFile(args[1]);
+                validateNumArgs(args, 2);
+                Repository.rmCommand(args[1]);
             case "log":
                 //TODO: handle the 'log' command
                 validateCWD();

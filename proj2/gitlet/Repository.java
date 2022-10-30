@@ -135,7 +135,7 @@ public class Repository {
      * Unstage the file if it is currently staged for addition
      * rm command
      */
-    public static void unstageFile(String filename) {
+    public static void rmCommand(String filename) {
         StagingArea stagingArea = StagingArea.load();
         Commit currentCommit = Commit.getCommitById(Branch.getCommitId(HEAD.getBranchName()));
         File file = join(CWD, filename);
@@ -223,7 +223,7 @@ public class Repository {
         //case1: checkout -- [filename] command
         if (args.length == 3) {
             if (!args[1].equals("--")) {
-                exitWithError("Incorrect operands");
+                exitWithError("Incorrect operands. ");
             }
             checkoutFile(Branch.getCommitId(HEAD.getBranchName()), args[2]);
             return;
@@ -231,9 +231,10 @@ public class Repository {
         //case2: checkout [commit id] -- [filename] command
         if (args.length == 4) {
             if (!args[2].equals("--")) {
-                exitWithError("Incorrect operands");
+                exitWithError("Incorrect operands. ");
             }
             checkoutFile(args[1], args[3]);
+            return;
         }
         //case3: checkout [branch name]
         if (args.length == 2) {
@@ -246,10 +247,10 @@ public class Repository {
                 exitWithError("No need to checkout the current branch. ");
                 return;
             }
-            if (isUntrackedFiles()) {
-                exitWithError("There is an untracked file in the way; delete it, " +
-                        "or add and commit it first. ");
-            }
+//            if (isUntrackedFiles()) {
+//                exitWithError("There is an untracked file in the way; delete it, " +
+//                        "or add and commit it first. ");
+//            }
             Commit commit = Commit.getCommitById(commitId);
             checkoutFile(commit);
             HEAD.setBranchName(args[1]);
@@ -312,6 +313,7 @@ public class Repository {
      * created under the branch, or anything like that.
      */
     public static void removeBranch(String branchName) {
+        File findBranchFile = join(Branch.BRANCHE_DIR, branchName);
         if (!join(Branch.BRANCHE_DIR, branchName).exists()) {
             exitWithError("A branch with that name does not exist. ");
             return;
@@ -320,13 +322,15 @@ public class Repository {
             exitWithError("Cannot remove the current branch. ");
             return;
         }
-        List<String> branches = plainFilenamesIn(Branch.BRANCHE_DIR);
-        for (String branch : branches) {
-            if (branch.equals(branchName)) {
-                File file = join(Branch.BRANCHE_DIR, branchName);
-                restrictedDelete(file);
-            }
-        }
+//        List<String> branches = plainFilenamesIn(Branch.BRANCHE_DIR);
+//        for (String branch : branches) {
+//            if (branch.equals(branchName)) {
+//                File file = join(Branch.BRANCHE_DIR, branchName);
+//                restrictedDelete(file);
+//            }
+//        }
+        findBranchFile.delete();
+
     }
     /**
      * Execute reset command
@@ -341,7 +345,7 @@ public class Repository {
             return;
         }
         checkoutFile(commit);
-        Branch.setCommitId(HEAD.getBranchName(), commitId);
+        Branch.setCommitId(HEAD.getBranchName(), commit.getCommitId());
     }
     /**
      * Excute merge command
