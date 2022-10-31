@@ -37,5 +37,4 @@ public class Blobs implements Serializable {
     private String calcHash() {
         return sha1(this.contents);
     }
-
 }

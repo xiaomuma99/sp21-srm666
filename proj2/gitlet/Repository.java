@@ -1,5 +1,6 @@
 package gitlet;
 
+import javax.sound.midi.SysexMessage;
 import java.io.File;
 import java.util.*;
 
@@ -40,8 +41,8 @@ public class Repository {
 
     public static void initFolder() {
         if (GITLET_DIR.exists()) {
-            Utils.exitWithError("A Gitlet version-control system " +
-                    "already exists in the current directory.");
+            Utils.exitWithError("A Gitlet version-control system "
+                    + "already exists in the current directory.");
             return;
         }
         GITLET_DIR.mkdir();
@@ -213,9 +214,84 @@ public class Repository {
             System.out.println(filename);
         }
         //print out Modification Not Staged For Commit file
+        System.out.println("=== Modification Not Staged For Commit ===");
+        Commit currentCommit = Commit.getCommitById(
+                Objects.requireNonNull(Branch.getCommitId(HEAD.getBranchName())));
+        List<String> cwdFileNames = plainFilenamesIn(CWD);
+        List<String> modifiedNotStagedForCommit = getModifiedNotStagedForCommit(
+                stagingArea, currentCommit, cwdFileNames);
+        printListString(modifiedNotStagedForCommit);
 
         //print out Untracked file
+        System.out.println("=== Untracked Files ===");
+        List<String> untrackedFiles = getUntrackedFiles(
+                stagingArea, currentCommit, cwdFileNames);
+        printListString(untrackedFiles);
     }
+    private static void printListString(List<String> stringList) {
+        for (String string : stringList) {
+            System.out.println(string);
+        }
+        System.out.println();
+    }
+    /** Return a list of Untracked files. */
+    private static List<String> getUntrackedFiles(StagingArea stagingArea,
+                                                  Commit currentCommit,
+                                                  List<String> cwdFileNames) {
+        List<String> result = new ArrayList<>();
+        for (String fileName : cwdFileNames) {
+            boolean tracked = currentCommit.getBlobs().containsKey(fileName);
+            boolean staged = stagingArea.getAddition().containsKey(fileName);
+            //untracked files
+            if (!staged && tracked) {
+                result.add(fileName);
+            }
+        }
+        return result;
+    }
+    /** Return a list of Modified but not Staged for Commit files. */
+    private static List<String> getModifiedNotStagedForCommit(StagingArea stagingArea,
+                                                               Commit currentCommit,
+                                                              List<String> cwdFileNames) {
+        List<String> result = new ArrayList<>();
+        for (String fileName : cwdFileNames) {
+            File file = join(CWD, fileName);
+            Blobs blob = new Blobs(readContents(file));
+            //case1: Tracked in current commit, changed in working directory
+            //but not staged
+            boolean tracked = currentCommit.getBlobs().containsKey(fileName);
+            boolean changed = !blob.getBlobId().equals(currentCommit.getBlobs().get(fileName));
+            boolean staged = stagingArea.getAddition().containsKey(fileName);
+            if (tracked && changed && !staged) {
+                result.add(fileName + " (modified)");
+                continue;;
+            }
+            //case2: Staged for addition, but with different contents than in the working
+            //directory;
+            changed = !blob.getBlobId().equals(stagingArea.getAddition().get(fileName));
+            if (staged && changed) {
+                result.add(fileName + " (modified)");
+            }
+        }
+        // case3: Staged for addition, but deleted in the working directory;
+        for (String fileName : stagingArea.getAddition().keySet()) {
+            if (!cwdFileNames.contains(fileName)) {
+                result.add(fileName + " (deleted)");
+            }
+        }
+
+        //case4: Not staged for removal, but tracked in the current commit and
+        //deleted from the working directory
+        for (String fileName : currentCommit.getBlobs().keySet()) {
+            boolean stagedForRemoval = stagingArea.getRemoval().contains(fileName);
+            boolean cwdContains = cwdFileNames.contains(fileName);
+            if (!stagedForRemoval && !cwdContains) {
+                result.add(fileName + " (deleted)");
+            }
+        }
+        return result;
+    }
+
     /**
      * Execute checkout -- [filename] command
      * Execute checkout [commit id] -- [filename] command
