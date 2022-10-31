@@ -195,24 +195,25 @@ public class Repository {
         List<String> branches = plainFilenamesIn(Branch.BRANCHE_DIR);
         System.out.println("=== Branches ===");
         System.out.println("*" + branchName);
+        Collections.sort(branches);
         for (String branch : branches) {
             if (!branch.equals(branchName)) {
                 System.out.println(branch);
             }
         }
+        System.out.println();
 
         //print out Staged File
-        System.out.println("=== Staged Files ===");
         StagingArea stagingArea = StagingArea.load();
-        for (Map.Entry<String, String> entry : stagingArea.getAddition().entrySet()) {
-            System.out.println(entry.getKey());
-        }
+        System.out.println("=== Staged Files ===");
+        List<String> stagedFiles = new ArrayList<>(stagingArea.getAddition().keySet());
+        printListString(stagedFiles);
 
         //print out removed File
         System.out.println("=== Removed Files ===");
-        for (String filename : stagingArea.getRemoval()) {
-            System.out.println(filename);
-        }
+        List<String> removedFiles = new ArrayList<>(stagingArea.getRemoval());
+        printListString(removedFiles);
+
         //print out Modification Not Staged For Commit file
         System.out.println("=== Modification Not Staged For Commit ===");
         Commit currentCommit = Commit.getCommitById(
@@ -247,6 +248,7 @@ public class Repository {
                 result.add(fileName);
             }
         }
+        Collections.sort(result);
         return result;
     }
     /** Return a list of Modified but not Staged for Commit files. */
@@ -289,6 +291,7 @@ public class Repository {
                 result.add(fileName + " (deleted)");
             }
         }
+        Collections.sort(result);
         return result;
     }
 
