@@ -264,7 +264,7 @@ public class Repository {
             boolean staged = stagingArea.getAddition().containsKey(fileName);
             if (tracked && changed && !staged) {
                 result.add(fileName + " (modified)");
-                continue;;
+                continue;
             }
             //case2: Staged for addition, but with different contents than in the working
             //directory;
