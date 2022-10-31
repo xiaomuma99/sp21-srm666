@@ -244,7 +244,7 @@ public class Repository {
             boolean tracked = currentCommit.getBlobs().containsKey(fileName);
             boolean staged = stagingArea.getAddition().containsKey(fileName);
             //untracked files
-            if (!staged && tracked) {
+            if (!staged && !tracked) {
                 result.add(fileName);
             }
         }
