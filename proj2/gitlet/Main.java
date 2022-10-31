@@ -72,9 +72,9 @@ public class Main {
                 validateNumArgs(args, 2);
                 Repository.mergeBranch(args[1]);
             default:
+                validateCWD();
                 Utils.exitWithError("No command with that name exists.");
         }
-        return;
     }
     /**
      * Checks the number of arguments versus the expected number,
@@ -84,8 +84,7 @@ public class Main {
      */
     public static void validateNumArgs(String[] args, int n) {
         if (args.length != n) {
-            throw new RuntimeException(
-                    String.format("Invalid number of arguments"));
+            Utils.exitWithError("Incorrect operands. ");
         }
     }
     public static void validateCWD() {
